@@ -1,0 +1,27 @@
+{% extends "master.html" %}
+
+{% block pagecontent %}
+
+    <form action="/talk?chat={{ chat }}" method="post" role="form">
+        <div class="form-group">
+            <label for="writeMessage">Comment</label>
+            <textarea name="message" id="writeMessage"class="form-control" rows="5" placeholder="Write your message."></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+
+{% for m in msg_list %} 
+{% if m.user == USER %}
+
+ <div class="well sentbyme msgbox"> <b>({{ m.chat }})</b> {{ m.user }} (Lähetetty: {{ m.deltatime }} sitten.):
+	 <p>{{ m.message|escape }} </p></div>
+	 
+{% else %}
+ 
+ <div class="well sentbyother msgbox"> <b>({{ m.chat }})</b> {{ m.user }} (Lähetetty: {{ m.deltatime }} sitten.):
+	 <p>{{ m.message|escape }} </p></div>
+	 
+{% endif %}
+{% endfor %}
+
+{% endblock %}

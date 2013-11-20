@@ -1,0 +1,62 @@
+<!DOCTYPE html> 
+{% autoescape true %}
+<html>
+    <head>
+        <meta charset=”utf-8”> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ title }}</title>
+        <link rel="stylesheet" media="screen" type="text/css" href="/stylesheets/app.css"/>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+    <body> 
+        <nav class="navbar-wrapper navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Keskustelu Paikka</a>
+                </div>
+
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>           
+        
+        <div class="container-fluid">
+            <div class="jumbotron">
+                <h1>{{ title }}</h1>
+                <h2 class="dateTitle"> Nyt on </h2>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 well">
+                    <ul class="list-group">
+                        <p class="list-group-item-heading">Huoneet</p>
+                        {% for c in chats %}
+                            {% if c == "count" %}
+                                <li class="list-group-item"><a href="/chatcount">{{ c }}</a></li>
+                            {% else %}
+                                <li class="list-group-item"><a href="/enterchat?chat={{c}}">{{ c }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            
+                <div class="col-md-8">
+                    {% block pagecontent %}
+                    
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/scripts/utility.js"></script>
+    </body>
+</html>
+{% endautoescape %}
+

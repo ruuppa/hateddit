@@ -1,0 +1,25 @@
+div.msgbox {
+  margin: 4px;
+  border: 3px ridge #0000F0;
+}
+
+div.nouser{
+  background-color: #ffff88
+}
+ 
+div.sentbyme {
+  color: #000000;
+  font-family: 9px Helvetica, sans-serif;
+  background-color: #c4ff88;
+}
+
+div.sentbyother {
+  color: #000000;
+  font-family: 10px Helvetica, sans-serif;
+  background-color: #ffc488;
+}
+
+div.messagetitle{
+  font-size: 20px;
+  text-decoration: underline;
+}

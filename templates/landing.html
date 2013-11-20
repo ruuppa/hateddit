@@ -1,0 +1,11 @@
+{% extends "master.html" %}
+
+{% block pagecontent %}
+
+{% for m in msg_list %} 
+ <div class="msgbox nouser well"><strong>({{ m.chat }})</strong> {{ m.user }} ( {{ m.deltatime }} ):
+ <p>{{ m.message|escape }} </p></div>
+{% endfor %}
+
+{% endblock %}
+

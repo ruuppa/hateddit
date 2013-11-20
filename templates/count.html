@@ -1,0 +1,10 @@
+{% extends "master.html" %}
+
+{% block pagecontent %}
+<p class="timeTitle"> Last 20 messages as of </p> 
+
+{% for m in msg_list %} 
+<div class="well msgbox nouser"> {{ m.user }}: <p>{{ m.message }} ({{ m.deltatime }} seconds ago)</p></div>
+{% endfor %}
+
+{% endblock %}
