@@ -1,0 +1,53 @@
+﻿A)
+Tavoitteena luoda Google App Enginellä anti-Reddit.
+Ohjelmointikielenä käytetään Pythonia, templatena Jinjaa
+ja tyylin muokkaukseen Bootstrappia.
+
+Laajennamme keskustelukerhosta oikeasti toimivan sivuston,
+johon voi luoda käyttäjätilin, lisätä kuvia ja
+äänestää vihatuinta mielipidettä.
+
+B)
+Miten tehdä käyttäjätilin rekisteröinti kunnolla käyttämillämme
+työkaluilla?
+Miten lisätä kuvia ja muokata niitä tilan säästämiseksi?
+Äänestetyimpien mielipiteitten ja uusien mielipiteitten
+sivulla näyttämisen tasapainottaminen. Näytetäänkö
+uudet ensin, vai vihatuimmat?
+
+C)
+Sivuston rakentaminen on käytännön osuus.
+Kun sivusto on valmis, on rooli ja osuus tehty.
+---------------------------------------------------
+
+- Tietokanta
+	- Postin pitää sisältää käyttäjänimi, kellonaika,
+	  teksti ja vihapisteet
+		- Post tietää mihin threadiin kuuluu (parent-child)
+
+- Thread -systeemi, joka sisältää useita posteja
+	- Yksi threadi käytännössä yksi chatroom
+	- Threadiin voi laittaa kuvan
+		- Kuva lisätään linkkinä, eli se tulee jostain
+		  imgurista tjsp
+
+- Käyttäjä voi lisätä kuvan omaksi naamakseen
+	- Kuva muokataan pienikokoiseksi ja tallennetaan pilveen
+	- Jos ei kuvaa, tulee käyttäjälle default -kuva
+
+- Pystyy VAIN replyamaan threadiin
+	- Yksittäisiin posteihin replyaminen tulee nopeasti hankalaksi
+	- ???
+
+- Kaikille posteille voi antaa vihapisteitä, mutta vain suoraan
+  threadille(ensimmäiselle postille) annetut pisteet vaikuttavat
+  näkyvyyteen etusivulla
+
+
+Toni:
+	- Sisäänkirjautuminen, rekisteröinti
+
+Janne:
+	- "Thread ei ole post" -Toni
+	- Kuvien muokkaus ja tallennus kantaan
+	- Grafiikat
