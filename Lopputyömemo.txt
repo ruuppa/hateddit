@@ -35,6 +35,8 @@ Kun sivusto on valmis, on rooli ja osuus tehty.
 	- Kuva muokataan pienikokoiseksi ja tallennetaan pilveen
 	- Jos ei kuvaa, tulee käyttäjälle default -kuva
 
+		-TODO: meneekö läpi vai ei?
+
 - Pystyy VAIN replyamaan threadiin
 	- Yksittäisiin posteihin replyaminen tulee nopeasti hankalaksi
 	- ???

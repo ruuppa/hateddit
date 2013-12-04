@@ -4,6 +4,7 @@ import webapp2, datetime, os, jinja2
 
 from google.appengine.ext import ndb
 from google.appengine.api import users
+from google.appengine.api import images
 
 CHATS = ['main', 'book', 'flame', 'count']
 
@@ -34,6 +35,9 @@ class ChatMessage(ndb.Model):
     message = ndb.TextProperty(required=True)
     chat = ndb.StringProperty(required=True)
 
+class User(ndb.Model):
+    avatar = ndb.BlobProperty()      # kuvan upload db:hen, blob erilainen ndb:ssä, korjaa
+    author = ndb.StringProperty()
 
 class GenericChatPage(webapp2.RequestHandler):
     
@@ -116,7 +120,6 @@ class ChatRoomLandingPage(webapp2.RequestHandler):
         else:
             self.redirect(users.create_login_url(self.request.uri))
 
-
 class ChatRoomPoster(webapp2.RequestHandler):
     
     def post(self):
@@ -129,10 +132,28 @@ class ChatRoomPoster(webapp2.RequestHandler):
         # to the root page
         self.redirect('/enterchat?chat=%s' % chat)
 
-
+class UserSettingsHandler(webapp2.RequestHandler):
+    
+    def post(self):
+        setting = User(author=users.get_current_user().nickname())
+        #avatar = images.resize(self.request.get("img"), 32, 32)    #Resize ei toimi, muttei hirveän tärkeä
+        avatar = self.request.get("img")
+        setting.avatar = ndb.Blob(avatar)       # Blob ei toimi, katso mikä vastaa ndb:ssä
+        setting.put()
+    
+    def get(self):
+        self.response.headers["Content-Type"] = CONTENT_HEADER
+        template_values = {
+                    'title': "Settings", 
+            }
+        template = JINJA_ENVIRONMENT.get_template('usersettings.html')
+        page = template.render(template_values)
+        self.response.write(page)
+        
 app = webapp2.WSGIApplication([
     ('/', ChatRoomLandingPage), 
     ('/talk', ChatRoomPoster),
     ('/enterchat', GenericChatPage),
     ('/chatcount', ChatRoomCountedHandler)
+    #('/settings', UserSettingsHandler)     #Ei toimi vielä
 ])
