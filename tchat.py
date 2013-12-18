@@ -1,10 +1,12 @@
 # encoding=utf8
 
-import webapp2, datetime, os, jinja2
+import webapp2, datetime, os, jinja2, urllib
 
 from google.appengine.ext import ndb
 from google.appengine.api import users
 from google.appengine.api import images
+from google.appengine.ext import blobstore  #Kuvat blobstoren kautta
+from google.appengine.ext.webapp import blobstore_handlers
 
 CHATS = ['main', 'book', 'flame', 'count']
 
@@ -35,10 +37,10 @@ class ChatMessage(ndb.Model):
     message = ndb.TextProperty(required=True)
     chat = ndb.StringProperty(required=True)
 
-class User(ndb.Model):
-    avatar = ndb.BlobProperty()      # kuvan upload db:hen, blob erilainen ndb:ssä, korjaa
+class UserProfile(ndb.Model):
     author = ndb.StringProperty()
-
+    avatar = ndb.BlobProperty()      # kuvan upload db:hen, blob erilainen ndb:ssä, korjaa
+    
 class GenericChatPage(webapp2.RequestHandler):
     
     def get(self):
@@ -134,26 +136,49 @@ class ChatRoomPoster(webapp2.RequestHandler):
 
 class UserSettingsHandler(webapp2.RequestHandler):
     
-    def post(self):
-        setting = User(author=users.get_current_user().nickname())
-        #avatar = images.resize(self.request.get("img"), 32, 32)    #Resize ei toimi, muttei hirveän tärkeä
-        avatar = self.request.get("img")
-        setting.avatar = ndb.Blob(avatar)       # Blob ei toimi, katso mikä vastaa ndb:ssä
-        setting.put()
+#    def post(self):
+#        setting = UserProfile(author=users.get_current_user().nickname())
+#        setting.avatar = self.request.get("img")
+#        setting.avatar = ndb.Blob(avatar)       # Blob ei toimi, katso mikä vastaa ndb:ssä
+#        setting.put()
     
     def get(self):
-        self.response.headers["Content-Type"] = CONTENT_HEADER
-        template_values = {
-                    'title': "Settings", 
-            }
-        template = JINJA_ENVIRONMENT.get_template('usersettings.html')
-        page = template.render(template_values)
-        self.response.write(page)
+#        upload_url = blobstore.create_upload_url('/upload')
+#        self.response.headers["Content-Type"] = CONTENT_HEADER
+#        template_values = {
+#                    'title': "Settings", 
+#            }
+#        template = JINJA_ENVIRONMENT.get_template('usersettings.html')
+#        page = template.render(template_values)
+#        self.response.write(page)
+
+#Placeholdertesti
+        upload_url = blobstore.create_upload_url('/upload')
+        self.response.out.write('<html><body>')
+        self.response.out.write('<form action="%s" method="POST" enctype="multipart/form-data">' % upload_url)
+        self.response.out.write("""Upload File: <input type="file" name="file"><br> <input type="submit"
+        name="submit" value="Submit"> </form></body></html>""")
+
+#Placeholdertesti
+class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+    def post(self):
+        upload_files = self.get_uploads('file')
+        blob_info = upload_files[0]
+        self.redirect('/serve/%s' % blob_info.key())
+
+#Placeholdertesti
+class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
+    def get(self, resource):
+        resource = str(urllib.unquote(resource))
+        blob_info = blobstore.BlobInfo.get(resource)
+        self.send_blob(blob_info)
         
 app = webapp2.WSGIApplication([
     ('/', ChatRoomLandingPage), 
     ('/talk', ChatRoomPoster),
     ('/enterchat', GenericChatPage),
-    ('/chatcount', ChatRoomCountedHandler)
-    #('/settings', UserSettingsHandler)     #Ei toimi vielä
+    ('/chatcount', ChatRoomCountedHandler),
+    ('/settings', UserSettingsHandler),     #Vie placeholdertestiin
+    ('/upload', UploadHandler),             #Placeholdertesti
+    ('/serve/([^/]+)?', ServeHandler)       #Placeholdertesti
 ])
